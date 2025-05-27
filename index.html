@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .todo-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 73%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      margin-left: 5px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .toggle-btn {
+      width: 100%;
+      margin-top: 10px;
+      background-color: #007bff;
+    }
+    .toggle-btn:hover {
+      background-color: #0069d9;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    li {
+      padding: 8px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      margin-top: 5px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+      border: none;
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+<div class="todo-container">
+  <h2>To-Do List</h2>
+  <input type="text" id="taskInput" placeholder="Enter task">
+  <button onclick="addTask()">Add</button>
+  <button class="toggle-btn" onclick="toggleView()">Show Completed</button>
+  <ul id="taskList"></ul>
+</div>
+
+<script>
+  let showCompletedOnly = false;
+
+  function addTask() {
+    let input = document.getElementById('taskInput');
+    let taskText = input.value.trim();
+
+    if (taskText === '') {
+      alert("Please enter a task.");
+      return;
+    }
+
+    let li = document.createElement('li');
+    li.textContent = taskText;
+
+    // Mark as complete on click
+    li.onclick = function () {
+      this.classList.toggle('completed');
+    };
+
+    let deleteBtn = document.createElement('button');
+    deleteBtn.textContent = "Delete";
+    deleteBtn.className = "delete-btn";
+    deleteBtn.onclick = function (e) {
+      e.stopPropagation(); // Prevent click on li
+      this.parentElement.remove();
+    };
+
+    li.appendChild(deleteBtn);
+    document.getElementById('taskList').appendChild(li);
+    input.value = "";
+  }
+
+  function toggleView() {
+    showCompletedOnly = !showCompletedOnly;
+    const tasks = document.querySelectorAll('#taskList li');
+    const toggleBtn = document.querySelector('.toggle-btn');
+
+    tasks.forEach(task => {
+      if (showCompletedOnly && !task.classList.contains('completed')) {
+        task.style.display = 'none';
+      } else {
+        task.style.display = 'flex';
+      }
+    });
+
+    toggleBtn.textContent = showCompletedOnly ? 'Show All' : 'Show Completed';
+  }
+</script>
+
+</body>
+</html>
